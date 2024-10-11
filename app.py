@@ -211,26 +211,43 @@ def display_group_metrics(connectedness, reciprocity, reachability, speed_of_com
             border-radius: 8px;
             margin-bottom: 15px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }}
+        .metric-fill {{
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            background-color: #598585;
+            opacity: 0.2;
         }}
         .metric-title {{
             font-size: 22px;
             font-weight: bold;
             color: #333;
             margin-bottom: 5px;
+            position: relative;
+            z-index: 1;
         }}
         .metric-value {{
             font-size: 20px;
             font-weight: bold;
             color: #1f77b4;
+            position: relative;
+            z-index: 1;
         }}
         .metric-description {{
             font-size: 16px;
             color: #555;
             line-height: 1.5;
+            position: relative;
+            z-index: 1;
         }}
     </style>
 
     <div class="metric-box">
+        <div class="metric-fill" style="width: {connectedness:.2f}%;"></div>
         <div class="metric-title">Connectedness</div>
         <div class="metric-value">{connectedness:.2f}%</div>
         <p class="metric-description">
@@ -239,6 +256,7 @@ def display_group_metrics(connectedness, reciprocity, reachability, speed_of_com
     </div>
 
     <div class="metric-box">
+        <div class="metric-fill" style="width: {reciprocity:.2f}%;"></div>
         <div class="metric-title">Reciprocity</div>
         <div class="metric-value">{reciprocity:.2f}%</div>
         <p class="metric-description">
@@ -247,6 +265,7 @@ def display_group_metrics(connectedness, reciprocity, reachability, speed_of_com
     </div>
 
     <div class="metric-box">
+        <div class="metric-fill" style="width: {reachability:.2f}%;"></div>
         <div class="metric-title">Reachability</div>
         <div class="metric-value">{reachability:.2f}%</div>
         <p class="metric-description">
@@ -255,6 +274,7 @@ def display_group_metrics(connectedness, reciprocity, reachability, speed_of_com
     </div>
 
     <div class="metric-box">
+        <div class="metric-fill" style="width: {speed_of_communication:.2f}%;"></div>
         <div class="metric-title">Speed of Communication</div>
         <div class="metric-value">{speed_of_communication:.2f}%</div>
         <p class="metric-description">
@@ -264,6 +284,7 @@ def display_group_metrics(connectedness, reciprocity, reachability, speed_of_com
     """
     
     st.markdown(metrics_html, unsafe_allow_html=True)
+
 
 def calculate_group_metrics(G):
     num_nodes = len(G.nodes)
