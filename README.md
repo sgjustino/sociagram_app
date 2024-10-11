@@ -39,7 +39,7 @@ This Streamlit app provides an interactive sociogram visualizer to analyze group
 
 1. **Run the App**: Launch the Streamlit app with the following command:
    ```bash
-   streamlit run sociagram_app.py
+   streamlit run app.py
    ```
 
 2. **Upload Data**: Upload a CSV file with the following structure:
