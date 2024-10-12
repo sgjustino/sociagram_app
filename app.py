@@ -81,7 +81,7 @@ def assign_node_colors_and_styles(G, profiles):
 
 def draw_graph(G, profiles):
     pos = nx.circular_layout(G)
-    plt.figure(figsize=(10, 10))
+    plt.figure(figsize=(8, 6))
     node_colors, node_edges, edge_colors, edge_widths = assign_node_colors_and_styles(G, profiles)
     
     # Draw nodes with specified colors and glow for Interconnectors
@@ -104,7 +104,6 @@ def draw_graph(G, profiles):
     ]
     plt.legend(handles=custom_legend, loc='upper center', bbox_to_anchor=(0.5, 1.25), fontsize='large', ncol=2, title="Relationship Profiles", title_fontsize='large')
     
-    plt.title("Sociogram Visualization with Profiles", fontsize=22)
     st.pyplot(plt)
 
 def analyze_profiles(G):
@@ -144,11 +143,11 @@ def analyze_profiles(G):
 
 def display_recommendations(profiles):
     recommendations = {
-        "Isolates": "Isolates have no connections within their peer group, which may indicate feelings of disconnection. Support them through structured group activities.",
-        "Solitary": "Solitary students have incoming connections but no outgoing ones. Encourage them to participate more actively in peer interactions.",
+        "Isolates": "With no connections, isolates may feel disconnected. Support them with structured group activities.",
+        "Solitary": "Solitaries have incoming but no outgoing connections. Encourage them to actively participate with peers.",
         "Star": "Stars have high incoming connections and influence. Leverage their popularity to foster inclusivity.",
         "Cliques": "Cliques have mutual connections and can form closed circles. Encourage activities that integrate them with others.",
-        "Interconnector": "Interconnectors bridge groups and aid in social cohesion. Assign them as peer support leaders and promote conflict resolution skills."
+        "Interconnector": "Interconnectors bridge groups and aid in social cohesion. Engage them as peer leaders and in conflict resolution."
     }
     
     profile_colors = {
@@ -163,25 +162,27 @@ def display_recommendations(profiles):
     st.markdown("""
     <style>
         .profile-box {
-            padding: 15px;
+            padding: 3px 10px 3px 10px;
             border-radius: 8px;
-            margin-bottom: 15px;
+            margin-bottom: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
         .profile-title {
-            font-size: 20px;
+            font-size: 16px;
             font-weight: bold;
             color: #333;
-            margin-bottom: 5px;
+            margin-bottom: 1px;
         }
         .profile-nodes {
-            font-size: 18px;
+            font-size: 16px;
             color: #555;
+            margin-bottom: 1px;
         }
         .profile-description {
-            font-size: 16px;
+            font-size: 14px;
             color: #333;
             line-height: 1.5;
+            margin-bottom: 1px;
         }
     </style>
     """, unsafe_allow_html=True)
@@ -207,9 +208,9 @@ def display_group_metrics(connectedness, reciprocity, reachability, speed_of_com
     <style>
         .metric-box {{
             background-color: #f9f9f9;
-            padding: 20px;
+            padding: 3px 10px 3px 10px;
             border-radius: 8px;
-            margin-bottom: 15px;
+            margin-bottom: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             position: relative;
             overflow: hidden;
@@ -223,26 +224,28 @@ def display_group_metrics(connectedness, reciprocity, reachability, speed_of_com
             opacity: 0.2;
         }}
         .metric-title {{
-            font-size: 22px;
+            font-size: 16px;
             font-weight: bold;
             color: #333;
-            margin-bottom: 5px;
+            margin-bottom: 1px;
             position: relative;
             z-index: 1;
         }}
         .metric-value {{
-            font-size: 20px;
+            font-size: 16px;
             font-weight: bold;
             color: #1f77b4;
             position: relative;
             z-index: 1;
+            margin-bottom: 1px;
         }}
         .metric-description {{
-            font-size: 16px;
+            font-size: 14px;
             color: #555;
             line-height: 1.5;
             position: relative;
             z-index: 1;
+            margin-bottom: 1px;
         }}
     </style>
 
@@ -251,7 +254,7 @@ def display_group_metrics(connectedness, reciprocity, reachability, speed_of_com
         <div class="metric-title">Connectedness</div>
         <div class="metric-value">{connectedness:.2f}%</div>
         <p class="metric-description">
-            Connectedness measures the percentage of actual friendships relative to the maximum possible connections.
+            Connectedness measures the % of actual friendships relative to the maximum possible connections.
         </p>
     </div>
 
@@ -260,7 +263,7 @@ def display_group_metrics(connectedness, reciprocity, reachability, speed_of_com
         <div class="metric-title">Reciprocity</div>
         <div class="metric-value">{reciprocity:.2f}%</div>
         <p class="metric-description">
-            Reciprocity reflects the percentage of friendships that are mutual, showing relationship balance.
+            Reciprocity reflects the % of friendships that are mutual, showing relationship balance.
         </p>
     </div>
 
@@ -269,7 +272,7 @@ def display_group_metrics(connectedness, reciprocity, reachability, speed_of_com
         <div class="metric-title">Reachability</div>
         <div class="metric-value">{reachability:.2f}%</div>
         <p class="metric-description">
-            Reachability shows the percentage of group members who can connect directly or indirectly within the largest connected subset.
+            Reachability shows the % of group members who can connect directly/indirectly within the largest connected subset.
         </p>
     </div>
 
@@ -309,7 +312,7 @@ def calculate_group_metrics(G):
     display_group_metrics(connectedness, reciprocity, reachability, speed_of_communication)
 
 # Streamlit UI Structure
-st.title("Sociogram Visualizer and Relationship Analysis by Group")
+st.title("Sociogram Analysis")
 
 # Custom CSS for boxed and scrollable tabs
 st.markdown("""
