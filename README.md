@@ -5,35 +5,64 @@ This Streamlit app provides an interactive sociogram visualizer to analyze group
 ## Features
 
 1. **Group Selection with Scrollable Tabs**:
-   - Navigate across groups with scrollable tabs that support up to 20+ groups.
+   - Navigate across groups with scrollable tabs for numerous groups.
+
 2. **Sociogram Visualization**:
-   - Visualizes group dynamics as a sociogram using NetworkX and Matplotlib.
+   - Visualizes group dynamics as a sociogram.
    - Nodes represent individuals, and edges represent their relationships, with custom color-coding for each profile type.
 
-3. **Profile Analysis and Definitions**:
+3. **Profile Analysis and Definitions with Interventions**:
    - Individuals are categorized into relationship profiles based on network characteristics:
      - **Isolates**: Individuals with no connections in the group, defined as nodes with zero in-degree and out-degree.
+       - **Intervention**: Provide structured group activities and encourage active interaction with more engaged members to help them feel integrated.
      - **Solitary**: Individuals with incoming connections but no outgoing connections, suggesting one-sided relationships.
+       - **Intervention**: Encourage these individuals to participate actively in discussions and activities, fostering reciprocal relationships.
      - **Stars**: Highly connected individuals with at least 4 incoming connections, indicating popularity or influence.
+       - **Utility**: Stars can be role models or facilitators in group settings, promoting inclusivity and helping others feel welcome.
      - **Cliques**: Individuals who are part of mutually connected groups within the same community (detected via Louvain clustering) and have at least 3 mutual connections.
+       - **Intervention**: Break down clique barriers by introducing mixed-group activities or collaborative projects with other clusters.
      - **Interconnectors**: Individuals who act as "bridges" between different clusters by connecting with members across at least 3 distinct communities.
+       - **Utility**: Leverage interconnectors as peer support leaders or liaisons to foster communication and cohesion across communities.
 
-   Each profile is accompanied by tailored recommendations to encourage social cohesion and enhance group dynamics.
+### How Community Detection with Louvain Method Works
 
-4. **Group Cohesion Metrics**:
-   - Each group’s network structure is analyzed to calculate key metrics:
+The Louvain method is a community detection algorithm that identifies clusters of nodes (communities) that are more densely connected internally. It works by maximizing **modularity**, a measure that quantifies the density of links within communities compared to links between communities.
+
+- **How It Works**: 
+  - Each node starts as its own community, then nodes are iteratively grouped to maximize modularity.
+  - Nodes within the same community are more likely to have dense interconnections, indicating a tightly-knit sub-group within the larger network.
+
+### How Profiles Are Defined with Louvain Communities
+
+- **Cliques**: Groups of nodes within the same Louvain-detected community, where each node has at least 2 mutual connections with other members of that community. Cliques often represent closely connected friend groups.
+- **Interconnectors**: Nodes that link with members across at least 3 distinct Louvain communities, serving as bridges and enhancing communication across otherwise separate clusters.
+
+4. **Group Cohesion Metrics with Interventions**:
+   - Each group’s network structure is analyzed to calculate key metrics, with potential interventions suggested based on the metric values:
+   
      - **Connectedness**: Measures the percentage of observed connections relative to the maximum possible connections.
        - **Formula**: `(Actual Connections / Maximum Possible Connections) * 100`
-       - **Interpretation**: High connectedness indicates an actively engaged group, while low connectedness may suggest isolation or limited interactions.
+       - **Interpretation**: High connectedness indicates an actively engaged group; low connectedness may suggest isolation or limited interactions.
+       - **Maximum Possible Connections**: For each individual who can select up to 3 friends, the maximum possible connections for a group of `N` members is `3 * N`.
+       - **Intervention**: If connectedness is low, initiate more team-building activities to increase interaction.
+
      - **Reciprocity**: Indicates the percentage of friendships that are mutual.
        - **Formula**: `(Mutual Connections / Maximum Possible Mutual Connections) * 100`
-       - **Interpretation**: High reciprocity suggests balanced, reciprocated relationships, while low reciprocity may imply one-sided friendships.
+       - **Interpretation**: High reciprocity suggests balanced, reciprocated relationships; low reciprocity may indicate one-sided friendships.
+       - **Maximum Possible Mutual Connections**: For a group of size `N` where each individual can choose up to 3 friends, the maximum possible mutual connections is half of the total maximum possible connections, i.e., `1.5 * N`.
+       - **Intervention**: If reciprocity is low, encourage open dialogue and active partnership to foster mutual relationships and balanced connections.
+
      - **Reachability**: Reflects the proportion of group members reachable (directly or indirectly) within the largest weakly connected component.
        - **Formula**: `(Size of Largest Connected Component / Total Number of Nodes) * 100`
-       - **Interpretation**: High reachability means most members are accessible, promoting cohesion, while low reachability indicates fragmentation.
+       - **Interpretation**: High reachability indicates cohesion, while low reachability suggests fragmentation.
+       - **Largest Weakly Connected Component**: The largest subset of nodes where each node is reachable from any other node in the component, ignoring edge directions.
+       - **Intervention**: Low reachability can be addressed by increasing communication and collaboration among isolated nodes or fragmented groups, possibly by pairing them with interconnectors.
+
      - **Speed of Communication**: Calculates the reach within a 3-step radius from the most connected individual, showing how quickly information can spread.
        - **Formula**: `(Nodes Reachable within 3 Steps from Most Connected Node / Total Number of Nodes) * 100`
-       - **Interpretation**: High values indicate efficient communication, while low values suggest limited reach within a few steps.
+       - **Interpretation**: High values indicate efficient communication; low values suggest limited reach within a few steps.
+       - **Most Connected Node**: The node with the highest degree (sum of in-degree and out-degree) within the largest weakly connected component.
+       - **Intervention**: For low speed of communication, consider designating roles to Stars and Interconnectors to expedite information flow and ensure everyone is informed while being conscious of isolated individuals.
 
 ## Getting Started
 
