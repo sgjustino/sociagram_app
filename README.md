@@ -19,23 +19,23 @@ This Streamlit app provides an interactive sociogram visualizer to analyze group
        - **Intervention**: Encourage these individuals to participate actively in discussions and activities, fostering reciprocal relationships.
      - **Stars**: Highly connected individuals with at least 4 incoming connections, indicating popularity or influence.
        - **Utility**: Stars can be role models or facilitators in group settings, promoting inclusivity and helping others feel welcome.
-     - **Cliques**: Individuals who are part of mutually connected groups within the same community (detected via Louvain clustering) and have at least 3 mutual connections.
+     - **Cliques**: Individuals who are part of mutually connected groups within the same community (detected via Louvain clustering).
        - **Intervention**: Break down clique barriers by introducing mixed-group activities or collaborative projects with other clusters.
      - **Interconnectors**: Individuals who act as "bridges" between different clusters by connecting with members across at least 3 distinct communities.
        - **Utility**: Leverage interconnectors as peer support leaders or liaisons to foster communication and cohesion across communities.
 
 ### How Community Detection with Louvain Method Works
 
-The Louvain method is a community detection algorithm that identifies clusters of nodes (communities) that are more densely connected internally. It works by maximizing **modularity**, a measure that quantifies the density of links within communities compared to links between communities.
+The Louvain method is a community detection algorithm that identifies clusters of individuals (communities) that are more densely connected internally. It works by maximizing **modularity**, a measure that quantifies the density of links within communities compared to links between communities.
 
 - **How It Works**: 
-  - Each node starts as its own community, then nodes are iteratively grouped to maximize modularity.
-  - Nodes within the same community are more likely to have dense interconnections, indicating a tightly-knit sub-group within the larger network.
+  - Each individual starts as its own community, then individuals are iteratively grouped to maximize modularity.
+  - Individuals within the same community are more likely to have dense interconnections, indicating a tightly-knit sub-group within the larger network.
 
 ### How Profiles Are Defined with Louvain Communities
 
-- **Cliques**: Groups of nodes within the same Louvain-detected community, where each node has at least 2 mutual connections with other members of that community. Cliques often represent closely connected friend groups.
-- **Interconnectors**: Nodes that link with members across at least 3 distinct Louvain communities, serving as bridges and enhancing communication across otherwise separate clusters.
+- **Cliques**: Groups of individuals within the same Louvain-detected community of size 3 or larger. In these cliques, every individual is directly connected to every other individual in the group. Cliques often represent closely connected friend groups.
+- **Interconnectors**: Individuals that link with members across at least 3 distinct Louvain communities, serving as bridges and enhancing communication across otherwise separate clusters.
 
 4. **Group Cohesion Metrics with Interventions**:
    - Each group’s network structure is analyzed to calculate key metrics, with potential interventions suggested based on the metric values:

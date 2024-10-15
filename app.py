@@ -70,7 +70,7 @@ def assign_node_colors_and_styles(G, profiles):
 
     # Set edge colors for cliques and edge widths based on closeness
     for u, v, data in G.edges(data=True):
-        if u in profiles['Cliques'] and v in profiles['Cliques']:
+        if u in profiles['Cliques'] and v in profiles['Cliques'] and G.has_edge(v, u):
             edge_colors.append('#D8BFD8')  # Light purple for clique connections
             edge_widths.append(1 + data['weight'] / 2)  # Width indicates strength
         else:
@@ -117,6 +117,12 @@ def analyze_profiles(G):
         "Interconnector": []
     }
 
+    # Convert to undirected graph for clique detection
+    G_undirected = G.to_undirected()
+
+    # Find all maximal cliques in the undirected graph
+    all_cliques = list(nx.find_cliques(G_undirected))
+
     # Define profiles
     for node in G.nodes:
         in_degree = G.in_degree(node)
@@ -130,10 +136,11 @@ def analyze_profiles(G):
         elif in_degree >= 4:
             profiles["Star"].append(node)
         
-        # Identify Cliques based on mutual connections within the same community and size >= 3
-        clique_neighbors = [neighbor for neighbor in neighbors if G.has_edge(neighbor, node) and partition[neighbor] == partition[node]]
-        if len(clique_neighbors) >= 2:
-            profiles["Cliques"].append(node)
+        # Clique identification of size 3 or larger
+        for clique in all_cliques:
+            if node in clique and len(clique) >= 3:
+                profiles["Cliques"].append(node)
+                break
         
         # Interconnector: connects across at least 3 communities
         if len(set(partition[neighbor] for neighbor in neighbors)) >= 3:
@@ -190,12 +197,17 @@ def display_recommendations(profiles):
     # Display each profile with background color and recommendations
     for profile, description in recommendations.items():
         nodes = profiles[profile]
-        node_list = ', '.join(str(node) for node in nodes) if nodes else 'None'
+        
+        if profile == "Cliques":
+            node_info = "See purple-labeled connections."
+        else:
+            node_list = ', '.join(str(node) for node in nodes) if nodes else 'None'
+            node_info = f"<strong>Members:</strong> {node_list}"
         
         st.markdown(f"""
         <div class="profile-box" style="background-color: {profile_colors.get(profile, 'lightgrey')};">
             <p class="profile-title">{profile}</p>
-            <p class="profile-nodes"><strong>Members:</strong> {node_list}</p>
+            <p class="profile-nodes">{node_info}</p>
             <p class="profile-description">{description}</p>
         </div>
         """, unsafe_allow_html=True)
